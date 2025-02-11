@@ -21,13 +21,5 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-      - name: Cache pip dependencies
-        uses: actions/cache@v3
-        with:
-            path: ~/.cache/pip
-            key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
-            restore-keys: |
-              ${{ runner.os }}-pip-
-
       - name: Run tests with pytest
         run: pytest
