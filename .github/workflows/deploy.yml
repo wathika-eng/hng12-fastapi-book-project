@@ -15,24 +15,7 @@ jobs:
       - name: Set up Docker
         uses: docker/setup-buildx-action@v2
 
-      - name: Login to Render
-        env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-        run: |
-          if [ -z "$RENDER_API_KEY" ]; then
-            echo "Error: RENDER_API_KEY is not set!"
-            exit 1
-          fi
-          echo "$RENDER_API_KEY" | docker login -u _ --password-stdin registry.render.com
-
-      - name: Build and push Docker image to Render
-        env:
-          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
-        run: |
-          docker build -t registry.render.com/$RENDER_SERVICE_ID/my-app:latest .
-          docker push registry.render.com/$RENDER_SERVICE_ID/my-app:latest
-
-      - name: Trigger Render Deploy
+      - name: Trigger Render Deployment upon changes on main branch
         env:
           RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
         run: |
