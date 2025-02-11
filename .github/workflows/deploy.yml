@@ -32,21 +32,9 @@ jobs:
             else
               git clone https://github.com/wathika-eng/hng12-fastapi-book-project && cd hng12-fastapi-book-project
             fi
-
-            # Ensure Docker is Running
-            sudo systemctl start docker || exit 1
-
-            # Run the Correct Docker Command
-            if command -v docker-compose &> /dev/null; then
-                docker-compose down
-                docker-compose up --build -d
-            elif command -v docker &> /dev/null && docker compose version &> /dev/null; then
-                docker compose down
-                docker compose up --build -d
-            else
-                echo "Neither docker-compose nor docker compose found!"
-                exit 1
-            fi
+                        
+            docker-compose down
+            docker-compose up --build -d
 
             # Clean Up Unused Resources
             docker system prune -af
