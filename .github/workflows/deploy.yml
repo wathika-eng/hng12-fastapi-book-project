@@ -27,8 +27,7 @@ jobs:
               cd fastapi-book-project
               git pull origin main
             else
-              git clone https://github.com/wathika-eng/hng12-fastapi-book-project
-              cd fastapi-book-project
+              git clone https://github.com/wathika-eng/hng12-fastapi-book-project && cd fastapi-book-project
             fi
             docker-compose down
             docker-compose up --build -d
