@@ -23,8 +23,7 @@ jobs:
         run: |
           ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} << 'EOF'
             set -e  # Exit if any command fails
-            cd /home/${{ secrets.VPS_USER }} || exit 1
-
+            
             # Clone or Pull Latest Code
             if [ -d "hng12-fastapi-book-project" ]; then
               cd hng12-fastapi-book-project
