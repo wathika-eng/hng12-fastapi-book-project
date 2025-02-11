@@ -99,6 +99,44 @@ uvicorn main:app
 
 ## API Endpoints
 
+Testing the API using Postman or any other API client.
+
+```bash
+curl -X GET http://127.0.0.1/api/v1/books/ #returns all books
+curl -X GET http://127.0.0.1/api/v1/books/1 #returns a specific book
+curl -X GET http://127.0.0.1/api/v1/books/4453 #returns an error since it's not found
+```
+
+Sample responses:
+If using Docker, API will be served via Nginx
+
+```bash
+curl -I http://127.0.0.1/api/v1/books/
+```
+
+```bash
+HTTP/1.1 200 OK
+Server: nginx/1.27.4
+Date: Tue, 11 Feb 2025 10:15:18 GMT
+Content-Type: application/json
+Content-Length: 338
+Connection: keep-alive
+```
+
+```json
+{
+  "id": 1,
+  "title": "The Hobbit",
+  "author": "J.R.R. Tolkien",
+  "publication_year": 1937,
+  "genre": "Science Fiction"
+}
+```
+
+```json
+{ "detail": "Book not found" }
+```
+
 ### Books
 
 - `GET /api/v1/books/` - Get all books

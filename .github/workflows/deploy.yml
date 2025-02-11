@@ -1,4 +1,4 @@
-name: Deploy to DigitalOcean VPS
+name: deploy
 
 on:
   push:

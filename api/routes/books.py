@@ -1,6 +1,6 @@
 from typing import OrderedDict
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, Path, status
 from fastapi.responses import JSONResponse
 
 from api.db.schemas import Book, Genre, InMemoryDB
@@ -45,7 +45,13 @@ async def get_books() -> OrderedDict[int, Book]:
 
 
 @router.get("/{book_id}", response_model=Book, status_code=status.HTTP_200_OK)
-async def get_book_by_id(book_id: int):
+async def get_book_by_id(book_id: str = Path(..., description="ID of the book")):
+    if not book_id.isdigit():
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Book ID must be a valid integer",
+        )
+    book_id = int(book_id)
     book = db.get_book(book_id)
     if book is None:
         raise HTTPException(
