@@ -29,12 +29,13 @@ jobs:
               cd hng12-fastapi-book-project
               git fetch --all
               git reset --hard origin/main
+              git pull origin main
             else
               git clone https://github.com/wathika-eng/hng12-fastapi-book-project && cd hng12-fastapi-book-project
             fi
                         
-            docker compose down
-            docker compose up --build -d
+            docker compose down --remove-orphans
+            docker compose up --build --force-recreate -d
 
             # Clean Up Unused Resources
             docker system prune -af
