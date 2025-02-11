@@ -23,19 +23,30 @@ jobs:
         run: |
           ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} << 'EOF'
             set -e  # Exit if any command fails
-            
+
             # Clone or Pull Latest Code
             if [ -d "hng12-fastapi-book-project" ]; then
               cd hng12-fastapi-book-project
-              git reset --hard  # Ensure clean state
-              git pull origin main
+              git fetch --all
+              git reset --hard origin/main
             else
               git clone https://github.com/wathika-eng/hng12-fastapi-book-project && cd hng12-fastapi-book-project
             fi
 
-            # Rebuild and Restart Docker Containers
-            docker compose down
-            docker compose up --build -d
+            # Ensure Docker is Running
+            sudo systemctl start docker || exit 1
+
+            # Run the Correct Docker Command
+            if command -v docker-compose &> /dev/null; then
+                docker-compose down
+                docker-compose up --build -d
+            elif command -v docker &> /dev/null && docker compose version &> /dev/null; then
+                docker compose down
+                docker compose up --build -d
+            else
+                echo "Neither docker-compose nor docker compose found!"
+                exit 1
+            fi
 
             # Clean Up Unused Resources
             docker system prune -af
