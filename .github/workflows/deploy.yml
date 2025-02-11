@@ -23,15 +23,8 @@ jobs:
               run: |
                 docker build -t registry.render.com/${{ secrets.RENDER_SERVICE_ID }}/my-app:latest .
                 docker push registry.render.com/${{ secrets.RENDER_SERVICE_ID }}/my-app:latest
-  
-            - name: Deploy to Render
+                  - name: Trigger Render Deploy
+            
+            - name: Deploy to render on change to main
               run: |
-                curl -X POST \
-                  -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
-                  -H "Accept: application/json" \
-                  -H "Content-Type: application/json" \
-                  -d '{
-                        "serviceId": "${{ secrets.RENDER_SERVICE_ID }}",
-                        "image": "registry.render.com/${{ secrets.RENDER_SERVICE_ID }}/my-app:latest"
-                      }' \
-                  https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys
+                curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
