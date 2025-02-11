@@ -1,4 +1,4 @@
-name: deploy
+name: Deploy
 
 on:
   push:
@@ -22,14 +22,22 @@ jobs:
       - name: Deploy to VPS
         run: |
           ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} << 'EOF'
-            cd ~/ || exit 1
+            set -e  # Exit if any command fails
+            cd /home/${{ secrets.VPS_USER }} || exit 1
+
+            # Clone or Pull Latest Code
             if [ -d "hng12-fastapi-book-project" ]; then
               cd hng12-fastapi-book-project
+              git reset --hard  # Ensure clean state
               git pull origin main
             else
               git clone https://github.com/wathika-eng/hng12-fastapi-book-project && cd hng12-fastapi-book-project
             fi
-            docker-compose down
-            docker-compose up --build -d
+
+            # Rebuild and Restart Docker Containers
+            docker compose down
+            docker compose up --build -d
+
+            # Clean Up Unused Resources
             docker system prune -af
           EOF

@@ -60,6 +60,11 @@ async def get_book_by_id(book_id: str = Path(..., description="ID of the book"))
     return book
 
 
+@router.get("/testing", status_code=status.HTTP_200_OK)
+async def test():
+    return JSONResponse(status_code=status.HTTP_200_OK, content={"message": "Test"})
+
+
 @router.put("/{book_id}", response_model=Book, status_code=status.HTTP_200_OK)
 async def update_book(book_id: int, book: Book) -> Book:
     return JSONResponse(
