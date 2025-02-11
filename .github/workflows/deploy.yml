@@ -1,0 +1,30 @@
+name: deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            - name: Set up Docker
+              uses: docker/setup-buildx-action@v2
+
+            - name: Login into render
+              run: |
+                echo "${{ secrets.RENDER_API_KEY }}" | docker login -u _ --password-stdin registry.render.com
+
+            - name: Build and push Docker image to Render
+              run: |
+                docker build -t registry.render.com/${{ secrets.RENDER_SERVICE_ID }}/my-app:latest .
+                docker push registry.render.com/${{ secrets.RENDER_SERVICE_ID }}/my-app:latest
+                  - name: Trigger Render Deploy
+            
+            - name: Deploy to render on change to main
+              run: |
+                curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
