@@ -1,4 +1,4 @@
-name: deploy to render
+name: Deploy to DigitalOcean VPS
 
 on:
   push:
@@ -9,18 +9,23 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@v2
-
-      - name: Trigger Render Deployment upon changes on main branch
-        env:
-          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+      - name: Setup SSH Key
         run: |
-          if [ -z "$RENDER_DEPLOY_HOOK" ]; then
-            echo "Render deploy hook is not set. Skipping deployment trigger."
-          else
-            curl -X POST "$RENDER_DEPLOY_HOOK"
-          fi
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.VPS_IP }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to VPS
+        run: |
+          ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_IP }} << 'EOF'
+            git clone https://github.com/wathika-eng/hng12-fastapi-book-project
+            cd fastapi-book-project
+            git pull origin main
+            docker-compose down
+            docker-compose up --build -d
+            docker system prune -af
+          EOF

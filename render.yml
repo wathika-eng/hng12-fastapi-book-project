@@ -1,0 +1,25 @@
+---
+services:
+  - name: fastapi-app
+    type: web
+    env: docker
+    plan: free
+    repo: https://github.com/wathika-eng/hng12-fastapi-book-project
+    region: oregon
+    dockerContext: .
+    dockerfilePath: Dockerfile
+    envVars:
+      - key: PORT
+        value: 8000
+
+  - name: nginx-proxy
+    type: web
+    env: docker
+    plan: free
+    repo: https://github.com/wathika-eng/hng12-fastapi-book-project
+    region: oregon
+    dockerContext: ./nginx
+    dockerfilePath: nginx/Dockerfile
+    envVars:
+      - key: PORT
+        value: 80

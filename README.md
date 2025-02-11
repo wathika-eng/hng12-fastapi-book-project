@@ -15,25 +15,36 @@ This project is a RESTful API built with FastAPI for managing a book collection.
 
 ## Project Structure
 
-```
-fastapi-book-project/
-├── api/
-│   ├── db/
-│   │   ├── __init__.py
-│   │   └── schemas.py      # Data models and in-memory database
-│   ├── routes/
-│   │   ├── __init__.py
-│   │   └── books.py        # Book route handlers
-│   └── router.py           # API router configuration
-├── core/
-│   ├── __init__.py
-│   └── config.py           # Application settings
-├── tests/
-│   ├── __init__.py
-│   └── test_books.py       # API endpoint tests
-├── main.py                 # Application entry point
-├── requirements.txt        # Project dependencies
-└── README.md
+```bash
+├── api
+│   ├── db
+│   │   ├── __init__.py
+│   │
+│   │   └── schemas.py
+│   ├── __init__.py
+│
+│   ├── router.py
+│   └── routes
+│       ├── books.py
+│       ├── __init__.py
+│  
+├── core
+│   ├── config.py
+│   ├── __init__.py
+│
+├── docker-compose.yml
+├── Dockerfile
+├── LICENSE
+├── main.py
+├── nginx
+│   ├── Dockerfile
+│   └── nginx.co
+├── README.md
+├── render.yml
+├── requirements.txt
+└── tests
+    ├── __init__.py
+    └── test_books.py
 ```
 
 ## Technologies Used
@@ -43,14 +54,15 @@ fastapi-book-project/
 - Pydantic
 - pytest
 - uvicorn
+- Docker
+- Nginx
 
 ## Installation
 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/hng12-devbotops/fastapi-book-project.git
-cd fastapi-book-project
+git clone https://github.com/wathika-eng/hng12-fastapi-book-project && cd fastapi-book-project
 ```
 
 2. Create a virtual environment:
@@ -64,6 +76,12 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 ```bash
 pip install -r requirements.txt
+```
+
+4. Optionally, using Docker:
+
+```bash
+docker-compose up --build
 ```
 
 ## Running the Application
